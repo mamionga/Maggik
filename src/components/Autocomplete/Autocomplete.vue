@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from "vue";
 import styles from './Autocomplete.module.scss';
+import {Spell} from "../MagicSearch/MagicSearch.types";
 
 const props = defineProps<{
-  items: string[]
+  items: Spell[]
 }>()
 
+const emit = defineEmits<{
+  (e: 'spell', toSet: Spell): void
+}>();
+
 const search = ref<string>("");
-const results = ref<string[]>([]);
+const results = ref<Spell[]>([]);
 const isOpen = ref<boolean>(false);
 const root = ref<HTMLElement | null>(null)
 const arrowCounter = ref<number>(-1);
 const filterResults = () => {
-  results.value = props.items.filter(item => item.toLowerCase().indexOf(search.value.toLowerCase()) > -1);
+  results.value = props.items.filter(item => item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1);
 }
 
 const onChange = () => {
@@ -20,8 +25,9 @@ const onChange = () => {
   isOpen.value = true;
 }
 
-const setResult = (result: string) => {
-  search.value = result;
+const setResult = (result: Spell) => {
+  search.value = result.name;
+  emit('spell', result);
   isOpen.value = false;
 }
 
@@ -38,7 +44,9 @@ const onArrowUp = () => {
 }
 
 const onEnter = () => {
-  search.value = results.value[arrowCounter.value];
+  const selected = results.value[arrowCounter.value];
+  emit('spell', selected);
+  search.value = selected.name;
   arrowCounter.value = -1;
   isOpen.value = false;
 }
@@ -71,8 +79,10 @@ onUnmounted(() => {
         @keydown.enter="onEnter"
     />
     <ul v-show="isOpen" :class="styles.results">
-      <li :class="i === arrowCounter ? [styles.result, styles.isActive] : styles.result" v-for="(result, i) in results" :key="result + '_' + i" @click="setResult(result)">
-        {{ result }}
+      <li :class="i === arrowCounter ? [styles.result, styles.isActive] : styles.result" v-for="(result, i) in results" :key="`${result.name}_${i}`" @click="setResult(result)">
+        <span :class="styles.level" v-if="result.level !== 'Cantrip'">LV {{ result.level.charAt(0) }}</span>
+        <span :class="styles.level" v-else>C</span>
+        <span>{{ result.name }}</span>
       </li>
     </ul>
   </div>

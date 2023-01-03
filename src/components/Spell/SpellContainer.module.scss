@@ -1,0 +1,27 @@
+.spell {
+  font-size: 14px;
+  .level {
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  ul {
+    strong {
+      font-family: BookinsanityBold, serif;
+    }
+    list-style: none;
+    padding: 0;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 19px;
+    letter-spacing: 0.2px;
+  }
+
+  .page {
+    float: right;
+    opacity: 0.4;
+    font-size: 15px;
+  }
+}

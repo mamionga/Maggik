@@ -28,6 +28,18 @@
     .result {
       padding: 10px;
       color: #ddd;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .level {
+        font-size: 10px;
+        font-family: monospace;
+        margin-right: 10px;
+        background: maroon;
+        padding: 4px 6px;
+        border-radius: 4px;
+      }
     }
     .isActive, .result:hover{
       background: #333;
