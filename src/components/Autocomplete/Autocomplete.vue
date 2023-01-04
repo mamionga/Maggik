@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, VNodeRef} from "vue";
 import styles from './Autocomplete.module.scss';
 import {Spell} from "../MagicSearch/MagicSearch.types";
 
@@ -14,7 +14,7 @@ const emit = defineEmits<{
 const search = ref<string>("");
 const results = ref<Spell[]>([]);
 const isOpen = ref<boolean>(false);
-const root = ref<HTMLElement | null>(null)
+const root = ref<VNodeRef | undefined>(undefined)
 const arrowCounter = ref<number>(-1);
 const filterResults = () => {
   results.value = props.items.filter(item => item.name.toLowerCase().indexOf(search.value.toLowerCase()) > -1);
